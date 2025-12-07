@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import '../models/category.dart';
-import '../services/ api_service.dart';
 
+
+import '../services/api_service.dart';
 import 'meals_screen.dart';
 import 'meal_detail_screen.dart';
+import 'favorites_screen.dart'; // нов import – креирај го овој екран
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,7 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void filterCategories(String query) {
-    final filtered = categories.where((c) => c.strCategory.toLowerCase().contains(query.toLowerCase())).toList();
+    final filtered = categories
+        .where((c) =>
+        c.strCategory.toLowerCase().contains(query.toLowerCase()))
+        .toList();
     setState(() {
       filteredCategories = filtered;
     });
@@ -45,7 +50,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final randomMeal = await apiService.getRandomMeal();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => MealDetailScreen(mealDetail: randomMeal)),
+      MaterialPageRoute(
+        builder: (_) => MealDetailScreen(mealDetail: randomMeal),
+      ),
+    );
+  }
+
+  void openFavorites() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const FavoritesScreen(),
+      ),
     );
   }
 
@@ -56,10 +72,15 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('Categories'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.favorite),
+            tooltip: 'Favorites',
+            onPressed: openFavorites,
+          ),
+          IconButton(
             icon: const Icon(Icons.casino),
             onPressed: showRandomMeal,
             tooltip: 'Random meal',
-          )
+          ),
         ],
       ),
       body: isLoading
@@ -69,7 +90,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              decoration: const InputDecoration(labelText: 'Search categories'),
+              decoration: const InputDecoration(
+                labelText: 'Search categories',
+              ),
               onChanged: filterCategories,
             ),
           ),
@@ -80,7 +103,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 final category = filteredCategories[index];
                 return Card(
                   child: ListTile(
-                    leading: Image.network(category.strCategoryThumb, width: 60, fit: BoxFit.cover),
+                    leading: Image.network(
+                      category.strCategoryThumb,
+                      width: 60,
+                      fit: BoxFit.cover,
+                    ),
                     title: Text(category.strCategory),
                     subtitle: Text(
                       category.strCategoryDescription,
@@ -91,7 +118,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => MealsScreen(categoryName: category.strCategory),
+                          builder: (_) => MealsScreen(
+                            categoryName: category.strCategory,
+                          ),
                         ),
                       );
                     },
