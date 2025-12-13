@@ -1,4 +1,4 @@
-// lib/screens/favorites_screen.dart
+
 import 'package:flutter/material.dart';
 import '../models/meal.dart';
 
@@ -27,7 +27,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 
   Future<void> loadFavoriteMeals() async {
-    // за секое ID повикај detail API (ќе добиеш MealDetail, но можеш и само Meal со thumb/name)
+
     final List<Meal> result = [];
     for (final id in favoritesService.favoriteIds) {
       final detail = await apiService.getMealDetails(id); // враќа MealDetail
